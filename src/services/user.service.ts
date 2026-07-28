@@ -60,4 +60,33 @@ export class UserService {
       },
     };
   }
+
+  async getUserById(userId: string) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado", 404);
+    }
+
+    return user;
+  }
+
+  async getAllUsers() {
+    return prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
+  }
 }
